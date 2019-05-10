@@ -46,7 +46,6 @@ app1/
 app2/
 |- static/
    |- app2/
-      |- css/
       |- scss/
          |- _colors.scss
          |- app2.scss
@@ -58,14 +57,7 @@ In `app2.scss` you could reference app1's and app2's `_colors.scss` import as so
 @import 'app1/scss/colors';
 @import 'app2/scss/colors';
 // Or since you are in app2, you can reference its colors with a relative path.
-@import 'scss/colors';
-```
-
-In your Django HTML template, reference the CSS file as normal:
-
-```html
-{% load static %}
-<link href="{% static 'app2/css/app2.css' %}" rel="stylesheet">
+@import 'colors';
 ```
 
 Then to compile `app2.scss` and put it in the `css` directory,
@@ -80,6 +72,13 @@ a corresponding `css` directory. This will traverse all subdirectories as well:
 
 ```
 python manage.py sass app2/static/app2/scss/ app2/static/app2/css/
+```
+
+In your Django HTML template, reference the CSS file as normal:
+
+```html
+{% load static %}
+<link href="{% static 'app2/css/app2.css' %}" rel="stylesheet">
 ```
 
 ✨✨ **Congratulations, you are now a Django + Sass developer!** ✨✨
@@ -112,7 +111,7 @@ python manage.py sass app2/static/app2/scss/ app2/static/app2/css/ -t compressed
 ```
 
 You may now optionally commit the CSS files to version control if so desired,
-or omit them, whatever fits your needs better. The run `collectsatic` as normal.
+or omit them, whatever fits your needs better. Then run `collectsatic` as normal.
 
 ```
 python manage.py collectstatic
@@ -146,8 +145,10 @@ Limitations
 
 * Only supports `-t` and `-p` options similar to `pysassc`. Ideally `django-sass` will
   be as similar as possible to the `pysassc` command line interface.
+  **Note:** if using with Bootstrap, specify `-p 8` as Bootstrap requires higher floating
+  point precision to work correctly.
 
-Please feel free to file an issue or make a pull request to improve any of these limitations. 🐱‍💻
+Feel free to file an issue or make a pull request to improve any of these limitations. 🐱‍💻
 
 
 Why django-sass?
@@ -156,13 +157,16 @@ Why django-sass?
 Other packages such as [django-libsass](https://github.com/torchbox/django-libsass)
 and [django-sass-processor](https://github.com/jrief/django-sass-processor),
 while nice packages, require `django-compressor` which itself depends on several
-other packages that require compilation to install. If you simply want to use
-Sass in development without installing a web of unwanted dependencies, then
-`django-sass` is for you. If you don't want to deploy any processors or compressors
-to your production server, then `django-sass` is for you. If you don't want to change
-the way you reference and serve static files, then `django-sass` is for you.
-And if you want the absolute simplest installation and setup possible for doing Sass,
-`django-sass` is for you too. 😀
+other packages that require compilation to install.
 
-django-sass only depends on libsass (which provides pre-build wheels for Windows, Mac,
+* If you simply want to use Sass in development without installing a web of unwanted
+  dependencies, then `django-sass` is for you.
+* If you don't want to deploy any processors or compressors to your production server,
+  then `django-sass` is for you.
+* If you don't want to change the way you reference and serve static files,
+  then `django-sass` is for you.
+* And if you want the absolute simplest installation and setup possible for doing Sass,
+  `django-sass` is for you too.
+
+django-sass only depends on libsass (which provides pre-built wheels for Windows, Mac,
 and Linux), and of course Django (any version).
