@@ -1,0 +1,19 @@
+/* app1/scss/_include.scss */
+@import "app1/scss/include";
+
+/* app2/_samedir.scss */
+@import "app2/scss/samedir";
+
+/* app2/subdir/_subdir.scss */
+@import "app2/scss/subdir/subdir";
+
+/* _samedir.scss */
+@import "samedir";
+
+/* subdir/_subdir.scss */
+@import "subdir/subdir";
+
+/* test.scss */
+.test {
+    color: red;
+}

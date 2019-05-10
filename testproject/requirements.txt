@@ -1,0 +1,2 @@
+-e ../ # django-sass locally
+django
