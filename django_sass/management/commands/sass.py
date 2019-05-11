@@ -50,6 +50,9 @@ class Command(BaseCommand):
         # If used with filename, it will return a string of file contents.
         if rval and outfile:
             # Write the outputted css to file
+            outfile_dir = os.path.dirname(outfile)
+            if not os.path.exists(outfile_dir):
+                os.makedirs(outfile_dir, exist_ok=True)
             file = open(outfile, "w")
             file.write(rval)
             file.close()
