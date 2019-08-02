@@ -33,8 +33,8 @@ class Command(BaseCommand):
             "-p",
             type=int,
             dest="p",
-            default=5,
-            help="Precision. Defaults to 5 (Bootstrap requires 8)",
+            default=8,
+            help="Precision. Defaults to 8",
         )
         parser.add_argument(
             "--watch",
@@ -53,7 +53,7 @@ class Command(BaseCommand):
             outfile_dir = os.path.dirname(outfile)
             if not os.path.exists(outfile_dir):
                 os.makedirs(outfile_dir, exist_ok=True)
-            file = open(outfile, "w")
+            file = open(outfile, "w", encoding="utf8")
             file.write(rval)
             file.close()
 

@@ -1,8 +1,8 @@
 django-sass
 ===========
 
-The absolute simplest way to use [Sass]() with Django. Pure Python,
-minimal dependencies, and no special configuration required.
+The absolute simplest way to use [Sass](https://sass-lang.com/) with Django.
+Pure Python, minimal dependencies, and no special configuration required.
 
 [Source code on GitHub](https://github.com/coderedcorp/wagtail-cache)
 
@@ -34,7 +34,7 @@ Usage
 -----
 
 In your app's static files, use Sass as normal. The only difference is that
-you should not traverse upwards using `../` in `@import` statements. For example:
+you can **not** traverse upwards using `../` in `@import` statements. For example:
 
 ```
 app1/
@@ -145,8 +145,6 @@ Limitations
 
 * Only supports `-t` and `-p` options similar to `pysassc`. Ideally `django-sass` will
   be as similar as possible to the `pysassc` command line interface.
-  **Note:** if using with Bootstrap, specify `-p 8` as Bootstrap requires higher floating
-  point precision to work correctly.
 
 Feel free to file an issue or make a pull request to improve any of these limitations. 🐱‍💻
 
@@ -170,3 +168,17 @@ other packages that require compilation to install.
 
 django-sass only depends on libsass (which provides pre-built wheels for Windows, Mac,
 and Linux), and of course Django (any version).
+
+
+Changelog
+---------
+
+#### 0.1.2
+* Fix: Write compiled CSS files as UTF-8.
+* Change: Default `-p` precision from 5 to 8 for better support building Bootstrap CSS.
+
+#### 0.1.1
+* Fix: Create full file path if not exists when specifying a file output.
+
+#### 0.1.0
+* Initial release
