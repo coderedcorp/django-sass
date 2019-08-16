@@ -23,6 +23,12 @@ class Command(BaseCommand):
             help="A file or directory in which to output transpiled css",
         )
         parser.add_argument(
+            "-g",
+            dest="g",
+            action="store_true",
+            help="Build a sourcemap. Only applicable if input is a file, not a directory.",
+        )
+        parser.add_argument(
             "-t",
             type=str,
             dest="t",
@@ -49,7 +55,18 @@ class Command(BaseCommand):
         # sass.compile() will return None of used with dirname.
         # If used with filename, it will return a string of file contents.
         if rval and outfile:
-            # Write the outputted css to file
+            # If we got a css and sourcemap tuple, write the sourcemap.
+            if isinstance(rval, tuple):
+                map_outfile = outfile + ".map"
+                outfile_dir = os.path.dirname(map_outfile)
+                if not os.path.exists(outfile_dir):
+                    os.makedirs(outfile_dir, exist_ok=True)
+                file = open(map_outfile, "w", encoding="utf8")
+                file.write(rval[1])
+                file.close()
+                rval = rval[0]
+
+            # Write the outputted css to file.
             outfile_dir = os.path.dirname(outfile)
             if not os.path.exists(outfile_dir):
                 os.makedirs(outfile_dir, exist_ok=True)
@@ -79,7 +96,7 @@ class Command(BaseCommand):
             sassargs.update({"include_paths": found_paths})
 
         if os.path.isdir(inpath):
-            # assume outpath is also a dir, or make it
+            # Assume outpath is also a dir, or make it.
             if not os.path.exists(outpath):
                 os.makedirs(outpath)
             if os.path.isdir(outpath):
@@ -95,8 +112,10 @@ class Command(BaseCommand):
                 )
             else:
                 outfile = outpath
+            if options["g"]:
+                sassargs.update({"source_map_filename": outfile + ".map"})
 
-         # Watch files for changes if specified
+         # Watch files for changes if specified.
         if options["watch"]:
             try:
                 self.stdout.write("Watching...")

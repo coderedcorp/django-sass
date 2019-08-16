@@ -61,10 +61,11 @@ In `app2.scss` you could reference app1's and app2's `_colors.scss` import as so
 ```
 
 Then to compile `app2.scss` and put it in the `css` directory,
-run the following management command:
+run the following management command (the `-g` will build a source map, which
+is helpful for debugging CSS):
 
 ```
-python manage.py sass app2/static/app2/scss/app2.scss app2/static/app2/css/app2.css
+python manage.py sass app2/static/app2/scss/app2.scss app2/static/app2/css/app2.css -g
 ```
 
 Or, you can compile the entire `scss` directory into
@@ -141,9 +142,7 @@ Limitations
 
 * Only files ending in `.scss` are supported for now.
 
-* Source map generation is not supported yet.
-
-* Only supports `-t` and `-p` options similar to `pysassc`. Ideally `django-sass` will
+* Only supports `-g`, `-p`, and `-t` options similar to `pysassc`. Ideally `django-sass` will
   be as similar as possible to the `pysassc` command line interface.
 
 Feel free to file an issue or make a pull request to improve any of these limitations. 🐱‍💻
@@ -172,6 +171,9 @@ and Linux), and of course Django (any version).
 
 Changelog
 ---------
+
+#### 0.2.0
+* New feature: `-g` option to build a source map (when input is a file, not a directory).
 
 #### 0.1.2
 * Fix: Write compiled CSS files as UTF-8.
