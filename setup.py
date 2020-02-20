@@ -1,6 +1,8 @@
 import os
 from setuptools import setup, find_packages
+
 from django_sass import __version__
+
 
 with open(os.path.join(os.path.dirname(__file__), "README.md"), encoding="utf8") as readme:
     README = readme.read()
@@ -11,7 +13,8 @@ setup(
     author="CodeRed LLC",
     author_email="info@coderedcorp.com",
     url="https://github.com/coderedcorp/django-sass",
-    description="The absolute simplest way to use Sass with Django. Pure Python, minimal dependencies, and no special configuration required!",
+    description=("The absolute simplest way to use Sass with Django. Pure Python, "
+                 "minimal dependencies, and no special configuration required!"),
     long_description=README,
     long_description_content_type="text/markdown",
     license="BSD license",
@@ -21,13 +24,6 @@ setup(
         "django",
         "libsass"
     ],
-    extras_require={
-        "dev": [
-            "pylint",
-            "twine",
-            "wheel"
-        ]
-    },
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",

@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+
 from django.core.management.base import BaseCommand
 from django.contrib.staticfiles.finders import get_finders
 import sass
@@ -50,9 +51,9 @@ class Command(BaseCommand):
             help="Watch input path and re-generate css files when scss files are changed.",
         )
 
-    def compile_sass(self, outfile, **kwargs):
+    def compile_sass(self, outfile: str, **kwargs) -> None:
         rval = sass.compile(**kwargs)
-        # sass.compile() will return None of used with dirname.
+        # sass.compile() will return None if used with dirname.
         # If used with filename, it will return a string of file contents.
         if rval and outfile:
             # If we got a css and sourcemap tuple, write the sourcemap.
@@ -74,7 +75,7 @@ class Command(BaseCommand):
             file.write(rval)
             file.close()
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         """
         Finds all static paths used by the project, and runs sass
         including those paths.
@@ -102,7 +103,9 @@ class Command(BaseCommand):
             if os.path.isdir(outpath):
                 sassargs.update({"dirname": (inpath, outpath)})
             else:
-                raise NotADirectoryError("Output path must also be a directory when input path is a directory.")
+                raise NotADirectoryError(
+                    "Output path must also be a directory when input path is a directory."
+                )
 
         if os.path.isfile(inpath):
             sassargs.update({"filename": inpath})
@@ -115,7 +118,7 @@ class Command(BaseCommand):
             if options["g"]:
                 sassargs.update({"source_map_filename": outfile + ".map"})
 
-         # Watch files for changes if specified.
+        # Watch files for changes if specified.
         if options["watch"]:
             try:
                 self.stdout.write("Watching...")
@@ -134,7 +137,7 @@ class Command(BaseCommand):
                                     needs_updated = True
                                     watchfiles.update({fullpath: curr_mtime})
 
-                    # Recompile the sass if needed
+                    # Recompile the sass if needed.
                     if needs_updated:
                         # Catch compile errors to keep the watcher running.
                         try:
@@ -143,14 +146,14 @@ class Command(BaseCommand):
                         except sass.CompileError as exc:
                             self.stdout.write(str(exc))
 
-                    # Go back to sleep
+                    # Go back to sleep.
                     time.sleep(3)
 
             except KeyboardInterrupt:
                 self.stdout.write("Bye.")
                 sys.exit(0)
 
-        # Write css
+        # Write css.
         self.stdout.write("Writing css...")
         self.compile_sass(outfile, **sassargs)
         self.stdout.write("Done.")

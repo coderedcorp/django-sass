@@ -169,6 +169,25 @@ django-sass only depends on libsass (which provides pre-built wheels for Windows
 and Linux), and of course Django (any version).
 
 
+Contributing
+------------
+
+To set up a development environment, first check out this repository, create a
+venv, then:
+
+```
+(myvenv)$ pip install -e ./
+(myvenv)$ pip install -r requirements-dev.txt
+```
+
+Before committing, run static analysis tools:
+
+```
+(myvenv)$ flake8
+(myvenv)$ mypy
+```
+
+
 Changelog
 ---------
 
