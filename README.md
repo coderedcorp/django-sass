@@ -4,7 +4,16 @@ django-sass
 The absolute simplest way to use [Sass](https://sass-lang.com/) with Django.
 Pure Python, minimal dependencies, and no special configuration required.
 
-[Source code on GitHub](https://github.com/coderedcorp/wagtail-cache)
+[Source code on GitHub](https://github.com/coderedcorp/django-sass)
+
+
+Status
+------
+
+|                        |                      |
+|------------------------|----------------------|
+| Python Package         |[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-sass)](https://pypi.org/project/django-sass/) [![PyPI - Django Version](https://img.shields.io/pypi/djversions/django-sass)](https://pypi.org/project/django-sass/) [![PyPI - Wheel](https://img.shields.io/pypi/wheel/django-sass)](https://pypi.org/project/django-sass/) [![PyPI - Downloads](https://img.shields.io/pypi/dm/django-sass)](https://pypi.org/project/django-sass/) [![PyPI](https://img.shields.io/pypi/v/django-sass)](https://pypi.org/project/django-sass/) |
+| Build                  | [![Build Status](https://dev.azure.com/coderedcorp/coderedcms/_apis/build/status/django-sass?branchName=master)](https://dev.azure.com/coderedcorp/coderedcms/_build/latest?definitionId=10&branchName=master) [![Azure DevOps tests (branch)](https://img.shields.io/azure-devops/tests/coderedcorp/coderedcms/10/master)](https://dev.azure.com/coderedcorp/coderedcms/_build/latest?definitionId=10&branchName=master) [![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/coderedcorp/coderedcms/10/master)](https://dev.azure.com/coderedcorp/coderedcms/_build/latest?definitionId=10&branchName=master) |
 
 
 Installation
