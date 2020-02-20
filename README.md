@@ -247,6 +247,11 @@ Then run the unit tests:
 Changelog
 ---------
 
+#### 1.0.0
+* New: You can now use `django_sass` APIs directly in Python.
+* Added unit tests.
+* Code quality improvements.
+
 #### 0.2.0
 * New feature: `-g` option to build a source map (when input is a file, not a directory).
 

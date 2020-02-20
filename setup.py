@@ -7,7 +7,7 @@ with open(os.path.join(os.path.dirname(__file__), "README.md"), encoding="utf8")
 
 setup(
     name="django-sass",
-    version="0.2.0",
+    version="1.0.0",
     author="CodeRed LLC",
     author_email="info@coderedcorp.com",
     url="https://github.com/coderedcorp/django-sass",
