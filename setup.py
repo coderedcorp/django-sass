@@ -31,6 +31,10 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
         "Framework :: Django",
+        "Framework :: Django :: 2.0",
+        "Framework :: Django :: 2.1",
+        "Framework :: Django :: 2.2",
+        "Framework :: Django :: 3.0",
         "Environment :: Web Environment",
     ],
 )
