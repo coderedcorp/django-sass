@@ -1,3 +1,4 @@
+-e ./
 flake8
 mypy
 pytest

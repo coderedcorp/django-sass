@@ -1,4 +1,3 @@
-from typing import List
 import os
 import shutil
 import subprocess
@@ -6,7 +5,6 @@ import time
 import unittest
 
 from django.test.testcases import TestCase
-
 
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
