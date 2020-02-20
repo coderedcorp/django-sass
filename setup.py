@@ -1,15 +1,13 @@
 import os
 from setuptools import setup, find_packages
 
-from django_sass import __version__
-
 
 with open(os.path.join(os.path.dirname(__file__), "README.md"), encoding="utf8") as readme:
     README = readme.read()
 
 setup(
     name="django-sass",
-    version=__version__,
+    version="0.2.0",
     author="CodeRed LLC",
     author_email="info@coderedcorp.com",
     url="https://github.com/coderedcorp/django-sass",

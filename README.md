@@ -178,6 +178,48 @@ django-sass only depends on libsass (which provides pre-built wheels for Windows
 and Linux), and of course Django (any version).
 
 
+Programmatically Compiling Sass
+-------------------------------
+
+You can also use `django-sass` in Python to programmatically compile the sass.
+This is useful for build scripts and static site generators.
+
+```python
+from django_sass import compile_sass
+
+# Compile scss and write to output file.
+compile_sass(
+    inpath="/path/to/file.scss",
+    outpath="/path/to/output.css",
+    output_style="compressed",
+    precision=8,
+    source_map=True
+)
+```
+
+For more advanced usage, you can specify additional sass search paths outside
+of your Django project by using the `include_paths` argument.
+
+```python
+from django_sass import compile_sass, find_static_paths
+
+# Get Django's static paths.
+dirs = find_static_paths()
+
+# Add external paths.
+dirs.append("/external/path/")
+
+# Compile scss and write to output file.
+compile_sass(
+    inpath="/path/to/file.scss",
+    outpath="/path/to/output.css",
+    output_style="compressed",
+    precision=8,
+    source_map=True,
+    include_paths=dirs,
+)
+```
+
 Contributing
 ------------
 
@@ -185,7 +227,6 @@ To set up a development environment, first check out this repository, create a
 venv, then:
 
 ```
-(myvenv)$ pip install -e ./
 (myvenv)$ pip install -r requirements-dev.txt
 ```
 
@@ -194,6 +235,12 @@ Before committing, run static analysis tools:
 ```
 (myvenv)$ flake8
 (myvenv)$ mypy
+```
+
+Then run the unit tests:
+
+```
+(myvenv)$ pytest
 ```
 
 

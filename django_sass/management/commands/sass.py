@@ -3,8 +3,9 @@ import sys
 import time
 
 from django.core.management.base import BaseCommand
-from django.contrib.staticfiles.finders import get_finders
 import sass
+
+from django_sass import compile_sass, find_static_scss
 
 
 class Command(BaseCommand):
@@ -51,97 +52,48 @@ class Command(BaseCommand):
             help="Watch input path and re-generate css files when scss files are changed.",
         )
 
-    def compile_sass(self, outfile: str, **kwargs) -> None:
-        rval = sass.compile(**kwargs)
-        # sass.compile() will return None if used with dirname.
-        # If used with filename, it will return a string of file contents.
-        if rval and outfile:
-            # If we got a css and sourcemap tuple, write the sourcemap.
-            if isinstance(rval, tuple):
-                map_outfile = outfile + ".map"
-                outfile_dir = os.path.dirname(map_outfile)
-                if not os.path.exists(outfile_dir):
-                    os.makedirs(outfile_dir, exist_ok=True)
-                file = open(map_outfile, "w", encoding="utf8")
-                file.write(rval[1])
-                file.close()
-                rval = rval[0]
-
-            # Write the outputted css to file.
-            outfile_dir = os.path.dirname(outfile)
-            if not os.path.exists(outfile_dir):
-                os.makedirs(outfile_dir, exist_ok=True)
-            file = open(outfile, "w", encoding="utf8")
-            file.write(rval)
-            file.close()
-
     def handle(self, *args, **options) -> None:
         """
         Finds all static paths used by the project, and runs sass
         including those paths.
         """
-        found_paths = []
-        for finder in get_finders():
-            if hasattr(finder, "storages"):
-                for appname in finder.storages:
-                    if hasattr(finder.storages[appname], "location"):
-                        abspath = finder.storages[appname].location
-                        found_paths.append(abspath)
 
-        sassargs = {"output_style": options["t"], "precision": options["p"]}
-        inpath = options["in"][0]
-        outpath = options["out"][0]
-        outfile = None
-
-        if found_paths:
-            sassargs.update({"include_paths": found_paths})
-
-        if os.path.isdir(inpath):
-            # Assume outpath is also a dir, or make it.
-            if not os.path.exists(outpath):
-                os.makedirs(outpath)
-            if os.path.isdir(outpath):
-                sassargs.update({"dirname": (inpath, outpath)})
-            else:
-                raise NotADirectoryError(
-                    "Output path must also be a directory when input path is a directory."
-                )
-
-        if os.path.isfile(inpath):
-            sassargs.update({"filename": inpath})
-            if os.path.isdir(outpath):
-                outfile = os.path.join(
-                    outpath, os.path.basename(inpath.replace(".scss", ".css"))
-                )
-            else:
-                outfile = outpath
-            if options["g"]:
-                sassargs.update({"source_map_filename": outfile + ".map"})
+        # Parse options.
+        o_inpath = options["in"][0]
+        o_outpath = options["out"][0]
+        o_srcmap = options["g"]
+        o_precision = options["p"]
+        o_style = options["t"]
 
         # Watch files for changes if specified.
         if options["watch"]:
             try:
                 self.stdout.write("Watching...")
+
+                # Track list of files to watch and their modified time.
                 watchfiles = {}
                 while True:
                     needs_updated = False
 
                     # Build/update list of ALL scss files in static paths.
-                    for finder in get_finders():
-                        for path, storage in finder.list([]):
-                            if path.endswith(".scss"):
-                                fullpath = finder.find(path)
-                                prev_mtime = watchfiles.get(fullpath, 0)
-                                curr_mtime = os.stat(fullpath).st_mtime
-                                if curr_mtime > prev_mtime:
-                                    needs_updated = True
-                                    watchfiles.update({fullpath: curr_mtime})
+                    for fullpath in find_static_scss():
+                        prev_mtime = watchfiles.get(fullpath, 0)
+                        curr_mtime = os.stat(fullpath).st_mtime
+                        if curr_mtime > prev_mtime:
+                            needs_updated = True
+                            watchfiles.update({fullpath: curr_mtime})
 
                     # Recompile the sass if needed.
                     if needs_updated:
                         # Catch compile errors to keep the watcher running.
                         try:
-                            self.compile_sass(outfile, **sassargs)
+                            compile_sass(
+                                inpath=o_inpath,
+                                outpath=o_outpath,
+                                output_style=o_style,
+                                precision=o_precision,
+                                source_map=o_srcmap,
+                            )
                             self.stdout.write("Updated files at %s" % time.time())
                         except sass.CompileError as exc:
                             self.stdout.write(str(exc))
@@ -149,11 +101,17 @@ class Command(BaseCommand):
                     # Go back to sleep.
                     time.sleep(3)
 
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, InterruptedError):
                 self.stdout.write("Bye.")
                 sys.exit(0)
 
         # Write css.
         self.stdout.write("Writing css...")
-        self.compile_sass(outfile, **sassargs)
+        compile_sass(
+            inpath=o_inpath,
+            outpath=o_outpath,
+            output_style=o_style,
+            precision=o_precision,
+            source_map=o_srcmap,
+        )
         self.stdout.write("Done.")

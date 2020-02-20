@@ -4,13 +4,13 @@ import subprocess
 import time
 import unittest
 
-from django.test.testcases import TestCase
+from django_sass import find_static_paths, find_static_scss
 
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-class TestDjangoSass(TestCase):
+class TestDjangoSass(unittest.TestCase):
 
     def setUp(self):
         self.outdir = os.path.join(THIS_DIR, "out")
@@ -31,6 +31,25 @@ class TestDjangoSass(TestCase):
             self.assertTrue("/* Tests: app2/scss/_samedir.scss */" in contents)
             self.assertTrue("/* Tests: app2/scss/subdir/_subdir.scss */" in contents)
             self.assertTrue("/* Tests: app2/scss/test.scss */" in contents)
+
+    def test_find_static_paths(self):
+        paths = find_static_paths()
+        # Assert that it found both of our apps' static dirs.
+        self.assertTrue(os.path.join(THIS_DIR, "app1", "static") in paths)
+        self.assertTrue(os.path.join(THIS_DIR, "app2", "static") in paths)
+
+    def test_find_static_sass(self):
+        files = find_static_scss()
+        # Assert that it found all of our scss files.
+        self.assertTrue(
+            os.path.join(THIS_DIR, "app1", "static", "app1", "scss", "_include.scss") in files)
+        self.assertTrue(
+            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "_samedir.scss") in files)
+        self.assertTrue(
+            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "test.scss") in files)
+        self.assertTrue(
+            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "subdir", "_subdir.scss")
+            in files)
 
     def test_cli(self):
         # Input and output paths relative to django static dirs.
