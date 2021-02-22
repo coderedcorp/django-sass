@@ -20,7 +20,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "django",
-        "libsass"
+        "libsass",
     ],
     classifiers=[
         "Intended Audience :: Developers",

@@ -2,8 +2,11 @@ import os
 import sys
 import time
 
+from typing import Dict
+
 from django.core.management.base import BaseCommand
-import sass
+import libsass
+from libsass import sass as sass
 
 from django_sass import compile_sass, find_static_scss
 
@@ -71,7 +74,7 @@ class Command(BaseCommand):
                 self.stdout.write("Watching...")
 
                 # Track list of files to watch and their modified time.
-                watchfiles = {}
+                watchfiles = {} # type: Dict[str, object]
                 while True:
                     needs_updated = False
 
