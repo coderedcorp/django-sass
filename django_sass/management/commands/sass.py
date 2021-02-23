@@ -5,8 +5,7 @@ import time
 from typing import Dict
 
 from django.core.management.base import BaseCommand
-import libsass
-from libsass import sass as sass
+import sass
 
 from django_sass import compile_sass, find_static_scss
 
