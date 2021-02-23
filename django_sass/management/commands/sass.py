@@ -73,7 +73,7 @@ class Command(BaseCommand):
                 self.stdout.write("Watching...")
 
                 # Track list of files to watch and their modified time.
-                watchfiles = {} # type: Dict[str, object]
+                watchfiles = {} # type: Dict[str, float]
                 while True:
                     needs_updated = False
 
