@@ -93,7 +93,7 @@ class TestDjangoSass(unittest.TestCase):
         self.assert_output(outpath)
         self.assertTrue(os.path.isfile(os.path.join(self.outdir, "test.css.map")))
 
-    @unittest.skip
+    @unittest.skip("Test needs fixed...")
     def test_cli_watch(self):
         # Input and output paths relative to django static dirs.
         inpath = os.path.join("app2", "static", "app2", "scss", "test.scss")
