@@ -1,8 +1,7 @@
+from typing import Dict
 import os
 import sys
 import time
-
-from typing import Dict
 
 from django.core.management.base import BaseCommand
 import sass
