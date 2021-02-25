@@ -2,7 +2,7 @@ from typing import Dict, List
 import os
 
 from django.contrib.staticfiles.finders import get_finders
-import sass 
+import sass
 
 
 def find_static_paths() -> List[str]:

@@ -26,7 +26,7 @@ SECRET_KEY = '-_wl=tq26(*wyvfza+ncg_436c53pu81d=07j62+vm5y2pc)f^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [] # type: List[str]
+ALLOWED_HOSTS = []  # type: List[str]
 
 
 # Application definition
