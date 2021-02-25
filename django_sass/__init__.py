@@ -96,7 +96,7 @@ def compile_sass(inpath: str, outpath: str, output_style: str = None, precision:
         output_style=output_style,
         precision=precision,
         include_paths=include_paths,
-        **sassargs,      
+        **sassargs,
     )
 
     # Write output.
