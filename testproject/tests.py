@@ -11,7 +11,6 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestDjangoSass(unittest.TestCase):
-
     def setUp(self):
         self.outdir = os.path.join(THIS_DIR, "out")
 
@@ -42,14 +41,23 @@ class TestDjangoSass(unittest.TestCase):
         files = find_static_scss()
         # Assert that it found all of our scss files.
         self.assertTrue(
-            os.path.join(THIS_DIR, "app1", "static", "app1", "scss", "_include.scss") in files)
+            os.path.join(THIS_DIR, "app1", "static", "app1", "scss", "_include.scss")
+            in files
+        )
         self.assertTrue(
-            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "_samedir.scss") in files)
+            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "_samedir.scss")
+            in files
+        )
         self.assertTrue(
-            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "test.scss") in files)
+            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "test.scss")
+            in files
+        )
         self.assertTrue(
-            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "subdir", "_subdir.scss")
-            in files)
+            os.path.join(
+                THIS_DIR, "app2", "static", "app2", "scss", "subdir", "_subdir.scss"
+            )
+            in files
+        )
 
     def test_cli(self):
         # Input and output paths relative to django static dirs.
