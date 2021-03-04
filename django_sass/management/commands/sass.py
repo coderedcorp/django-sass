@@ -95,7 +95,9 @@ class Command(BaseCommand):
                                 precision=o_precision,
                                 source_map=o_srcmap,
                             )
-                            self.stdout.write("Updated files at %s" % time.time())
+                            self.stdout.write(
+                                "Updated files at %s" % time.time()
+                            )
                         except sass.CompileError as exc:
                             self.stdout.write(str(exc))
 
