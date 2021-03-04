@@ -9,7 +9,7 @@ with open(
 
 setup(
     name="django-sass",
-    version="1.0.0",
+    version="1.0.1",
     author="CodeRed LLC",
     author_email="info@coderedcorp.com",
     url="https://github.com/coderedcorp/django-sass",

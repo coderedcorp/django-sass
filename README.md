@@ -93,7 +93,8 @@ In your Django HTML template, reference the CSS file as normal:
 
 ✨✨ **Congratulations, you are now a Django + Sass developer!** ✨✨
 
-Now you can commit those CSS files to version control, or run `collectstatic` and deploy them as normal.
+Now you can commit those CSS files to version control, or run `collectstatic`
+and deploy them as normal.
 
 For an example project layout, see `testproject/` in this repository.
 
@@ -101,8 +102,8 @@ For an example project layout, see `testproject/` in this repository.
 Watch Mode
 ----------
 
-To have `django-sass` watch files and recompile them as they change (useful in development),
-add the ``--watch`` flag.
+To have `django-sass` watch files and recompile them as they change (useful in
+development), add the ``--watch`` flag.
 
 ```
 python manage.py sass app2/static/app2/scss/ app2/static/app2/css/ --watch
@@ -133,10 +134,11 @@ And now proceed with deploying your files as normal.
 Limitations
 -----------
 
-* `@import` statements must reference a path relative to a path in `STATICFILES_FINDERS`
-  (which will usually be an app's `static/` directory or some other directory specified
-  in `STATICFILES_DIRS`). Or they can reference a relative path equal to or below the
-  current file. It does not support traversing up the filesystem (i.e. `../`).
+* `@import` statements must reference a path relative to a path in
+  `STATICFILES_FINDERS` (which will usually be an app's `static/` directory or
+  some other directory specified in `STATICFILES_DIRS`). Or they can reference a
+  relative path equal to or below the current file. It does not support
+  traversing up the filesystem (i.e. `../`).
 
   Legal imports:
   ```scss
@@ -151,31 +153,43 @@ Limitations
 
 * Only files ending in `.scss` are supported for now.
 
-* Only supports `-g`, `-p`, and `-t` options similar to `pysassc`. Ideally `django-sass` will
-  be as similar as possible to the `pysassc` command line interface.
+* Only supports `-g`, `-p`, and `-t` options similar to `pysassc`. Ideally
+  `django-sass` will be as similar as possible to the `pysassc` command line
+  interface.
 
-Feel free to file an issue or make a pull request to improve any of these limitations. 🐱‍💻
+Feel free to file an issue or make a pull request to improve any of these
+limitations. 🐱‍💻
 
 
 Why django-sass?
 ----------------
 
-Other packages such as [django-libsass](https://github.com/torchbox/django-libsass)
-and [django-sass-processor](https://github.com/jrief/django-sass-processor),
-while nice packages, require `django-compressor` which itself depends on several
-other packages that require compilation to install.
+Other packages such as
+[django-libsass](https://github.com/torchbox/django-libsass) and
+[django-sass-processor](https://github.com/jrief/django-sass-processor), while
+nice packages, require `django-compressor` which itself depends on several other
+packages that require compilation to install.
 
-* If you simply want to use Sass in development without installing a web of unwanted
-  dependencies, then `django-sass` is for you.
-* If you don't want to deploy any processors or compressors to your production server,
-  then `django-sass` is for you.
+Installing `django-compressor` in your production web server requires a LOT of
+extra bloat including a C compiler. It then will compile the Sass on-the-fly
+while rendering the HTML templates. This is a wasteful use of CPU on your web
+server.
+
+Instead, `django-sass` lets you compile the Sass locally on your machine
+*before* deploying, to reduce dependencies and CPU time on your production web
+server. This helps keep things fast and simple.
+
+* If you simply want to use Sass in development without installing a web of
+  unwanted dependencies, then `django-sass` is for you.
+* If you don't want to deploy any processors or compressors to your production
+  server, then `django-sass` is for you.
 * If you don't want to change the way you reference and serve static files,
   then `django-sass` is for you.
-* And if you want the absolute simplest installation and setup possible for doing Sass,
-  `django-sass` is for you too.
+* And if you want the absolute simplest installation and setup possible for
+  doing Sass, `django-sass` is for you too.
 
-django-sass only depends on libsass (which provides pre-built wheels for Windows, Mac,
-and Linux), and of course Django (any version).
+django-sass only depends on libsass (which provides pre-built wheels for
+Windows, Mac, and Linux), and of course Django (any version).
 
 
 Programmatically Compiling Sass
@@ -233,6 +247,7 @@ venv, then:
 Before committing, run static analysis tools:
 
 ```
+(myvenv)$ black .
 (myvenv)$ flake8
 (myvenv)$ mypy
 ```
@@ -247,17 +262,25 @@ Then run the unit tests:
 Changelog
 ---------
 
+#### 1.0.1
+* Maintanence release, no functional changes.
+* Add additional type hints within the codebase.
+* Tested against Django 3.1
+* Formatted code with `black`.
+
 #### 1.0.0
 * New: You can now use `django_sass` APIs directly in Python.
 * Added unit tests.
 * Code quality improvements.
 
 #### 0.2.0
-* New feature: `-g` option to build a source map (when input is a file, not a directory).
+* New feature: `-g` option to build a source map (when input is a file, not a
+  directory).
 
 #### 0.1.2
 * Fix: Write compiled CSS files as UTF-8.
-* Change: Default `-p` precision from 5 to 8 for better support building Bootstrap CSS.
+* Change: Default `-p` precision from 5 to 8 for better support building
+  Bootstrap CSS.
 
 #### 0.1.1
 * Fix: Create full file path if not exists when specifying a file output.
