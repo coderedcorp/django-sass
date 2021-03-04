@@ -28,7 +28,9 @@ class TestDjangoSass(unittest.TestCase):
             contents = f.read()
             self.assertTrue("/* Tests: app1/scss/_include.scss */" in contents)
             self.assertTrue("/* Tests: app2/scss/_samedir.scss */" in contents)
-            self.assertTrue("/* Tests: app2/scss/subdir/_subdir.scss */" in contents)
+            self.assertTrue(
+                "/* Tests: app2/scss/subdir/_subdir.scss */" in contents
+            )
             self.assertTrue("/* Tests: app2/scss/test.scss */" in contents)
 
     def test_find_static_paths(self):
@@ -41,20 +43,32 @@ class TestDjangoSass(unittest.TestCase):
         files = find_static_scss()
         # Assert that it found all of our scss files.
         self.assertTrue(
-            os.path.join(THIS_DIR, "app1", "static", "app1", "scss", "_include.scss")
-            in files
-        )
-        self.assertTrue(
-            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "_samedir.scss")
-            in files
-        )
-        self.assertTrue(
-            os.path.join(THIS_DIR, "app2", "static", "app2", "scss", "test.scss")
+            os.path.join(
+                THIS_DIR, "app1", "static", "app1", "scss", "_include.scss"
+            )
             in files
         )
         self.assertTrue(
             os.path.join(
-                THIS_DIR, "app2", "static", "app2", "scss", "subdir", "_subdir.scss"
+                THIS_DIR, "app2", "static", "app2", "scss", "_samedir.scss"
+            )
+            in files
+        )
+        self.assertTrue(
+            os.path.join(
+                THIS_DIR, "app2", "static", "app2", "scss", "test.scss"
+            )
+            in files
+        )
+        self.assertTrue(
+            os.path.join(
+                THIS_DIR,
+                "app2",
+                "static",
+                "app2",
+                "scss",
+                "subdir",
+                "_subdir.scss",
             )
             in files
         )
@@ -99,7 +113,9 @@ class TestDjangoSass(unittest.TestCase):
         self.assertEqual(proc.returncode, 0)
         # Assert output is correct.
         self.assert_output(outpath)
-        self.assertTrue(os.path.isfile(os.path.join(self.outdir, "test.css.map")))
+        self.assertTrue(
+            os.path.isfile(os.path.join(self.outdir, "test.css.map"))
+        )
 
     @unittest.skip("Test needs fixed...")
     def test_cli_watch(self):
