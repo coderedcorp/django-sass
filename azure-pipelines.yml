@@ -15,7 +15,7 @@
 
 
 trigger:
-  - master
+  - main
 
 
 stages:
