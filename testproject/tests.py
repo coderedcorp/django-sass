@@ -72,6 +72,12 @@ class TestDjangoSass(unittest.TestCase):
             )
             in files
         )
+        self.assertTrue(
+            os.path.join(
+                THIS_DIR, "app3", "static", "app3", "sass", "test.sass"
+            )
+            in files
+        )
 
     def test_cli(self):
         # Input and output paths relative to django static dirs.

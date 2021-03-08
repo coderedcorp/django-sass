@@ -151,8 +151,6 @@ Limitations
   @import '../file';
   ```
 
-* Only files ending in `.scss` are supported for now.
-
 * Only supports `-g`, `-p`, and `-t` options similar to `pysassc`. Ideally
   `django-sass` will be as similar as possible to the `pysassc` command line
   interface.
@@ -261,6 +259,9 @@ Then run the unit tests:
 
 Changelog
 ---------
+
+#### 1.1.0
+* New: Will now compile Sass files as well as SCSS files.
 
 #### 1.0.1
 * Maintanence release, no functional changes.
