@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []  # type: List[str]
 INSTALLED_APPS = [
     "app1",
     "app2",
+    "app3",
     "django_sass",
     "django.contrib.admin",
     "django.contrib.auth",

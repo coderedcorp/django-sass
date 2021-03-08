@@ -3,11 +3,19 @@ import shutil
 import subprocess
 import time
 import unittest
+from typing import List
 
 from django_sass import find_static_paths, find_static_scss
 
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+SCSS_CONTAINS = [
+    "/* Tests: app1/scss/_include.scss */",
+    "/* Tests: app2/scss/_samedir.scss */",
+    "/* Tests: app2/scss/subdir/_subdir.scss */",
+    "/* Tests: app2/scss/test.scss */",
+]
 
 
 class TestDjangoSass(unittest.TestCase):
@@ -18,20 +26,29 @@ class TestDjangoSass(unittest.TestCase):
         # Clean up output files
         shutil.rmtree(self.outdir, ignore_errors=True)
 
-    def assert_output(self, real_outpath: str):
+    def assert_output(
+        self,
+        inpath: str,
+        outpath: str,
+        real_outpath: str,
+        contains: List[str],
+        args: List[str] = None,
+    ):
+        # Command to run
+        args = args or []
+        cmd = ["python", "manage.py", "sass", *args, inpath, outpath]
+        # Run the management command on testproject.
+        proc = subprocess.run(cmd, cwd=THIS_DIR)
+        # Verify the process exited cleanly.
+        self.assertEqual(proc.returncode, 0)
         # Verify that the output file exists.
-        print(real_outpath)
-        self.assertTrue(os.path.isfile(real_outpath))
+        # self.assertTrue(os.path.isfile(real_outpath))
 
         # Verify that the file contains expected output from all sass files.
         with open(real_outpath, encoding="utf8") as f:
             contents = f.read()
-            self.assertTrue("/* Tests: app1/scss/_include.scss */" in contents)
-            self.assertTrue("/* Tests: app2/scss/_samedir.scss */" in contents)
-            self.assertTrue(
-                "/* Tests: app2/scss/subdir/_subdir.scss */" in contents
-            )
-            self.assertTrue("/* Tests: app2/scss/test.scss */" in contents)
+            for compiled_data in contains:
+                self.assertTrue(compiled_data in contents)
 
     def test_find_static_paths(self):
         paths = find_static_paths()
@@ -72,47 +89,59 @@ class TestDjangoSass(unittest.TestCase):
             )
             in files
         )
+        self.assertTrue(
+            os.path.join(
+                THIS_DIR, "app3", "static", "app3", "sass", "indent_test.sass"
+            )
+            in files
+        )
 
     def test_cli(self):
         # Input and output paths relative to django static dirs.
         inpath = os.path.join("app2", "static", "app2", "scss", "test.scss")
         outpath = os.path.join(self.outdir, "test_file.css")
-        # Command to run
-        cmd = ["python", "manage.py", "sass", inpath, outpath]
-        # Run the management command on testproject.
-        proc = subprocess.run(cmd, cwd=THIS_DIR)
-        # Verify the process exited cleanly.
-        self.assertEqual(proc.returncode, 0)
-        # Assert output is correct.
-        self.assert_output(outpath)
+        self.assert_output(
+            inpath=inpath,
+            outpath=outpath,
+            real_outpath=outpath,
+            contains=SCSS_CONTAINS,
+        )
 
     def test_cli_dir(self):
         # Input and output paths relative to django static dirs.
         inpath = os.path.join("app2", "static", "app2", "scss")
-        outpath = self.outdir
         # Expected output path on filesystem.
         real_outpath = os.path.join(self.outdir, "test.css")
-        # Command to run
-        cmd = ["python", "manage.py", "sass", inpath, outpath]
-        # Run the management command on testproject.
-        proc = subprocess.run(cmd, cwd=THIS_DIR)
-        # Verify the process exited cleanly.
-        self.assertEqual(proc.returncode, 0)
-        # Assert output is correct.
-        self.assert_output(real_outpath)
+        self.assert_output(
+            inpath=inpath,
+            outpath=self.outdir,
+            real_outpath=real_outpath,
+            contains=SCSS_CONTAINS,
+        )
+
+    def test_sass_compiles(self):
+        # Input and output paths relative to django static dirs.
+        inpath = os.path.join("app3", "static", "app3", "sass")
+        # Expected output path on filesystem.
+        real_outpath = os.path.join(self.outdir, "indent_test.css")
+        self.assert_output(
+            inpath=inpath,
+            outpath=self.outdir,
+            real_outpath=real_outpath,
+            contains=["/* Tests: app3/sass/indent_test.sass */"],
+        )
 
     def test_cli_srcmap(self):
         # Input and output paths relative to django static dirs.
         inpath = os.path.join("app2", "static", "app2", "scss", "test.scss")
         outpath = os.path.join(self.outdir, "test.css")
-        # Command to run
-        cmd = ["python", "manage.py", "sass", "-g", inpath, outpath]
-        # Run the management command on testproject.
-        proc = subprocess.run(cmd, cwd=THIS_DIR)
-        # Verify the process exited cleanly.
-        self.assertEqual(proc.returncode, 0)
-        # Assert output is correct.
-        self.assert_output(outpath)
+        self.assert_output(
+            inpath=inpath,
+            outpath=outpath,
+            real_outpath=outpath,
+            contains=SCSS_CONTAINS,
+            args=["-g"],
+        )
         self.assertTrue(
             os.path.isfile(os.path.join(self.outdir, "test.css.map"))
         )

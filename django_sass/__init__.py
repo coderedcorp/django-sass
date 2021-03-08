@@ -24,15 +24,15 @@ def find_static_paths() -> List[str]:
 
 def find_static_scss() -> List[str]:
     """
-    Finds all static scss files available in this Django project.
+    Finds all static scss/sass files available in this Django project.
 
     :returns:
-        List of paths of static scss files.
+        List of paths of static scss/sass files.
     """
     scss_files = []
     for finder in get_finders():
         for path, storage in finder.list([]):
-            if path.endswith(".scss"):
+            if path.endswith(".scss") or path.endswith(".sass"):
                 fullpath = finder.find(path)
                 scss_files.append(fullpath)
     return scss_files
@@ -51,7 +51,7 @@ def compile_sass(
     and writes output CSS and/or sourcemaps to file.
 
     :param str inpath:
-        Path to SCSS file or directory of SCSS files.
+        Path to SCSS/Sass file or directory of SCSS/Sass files.
     :param str outpath:
         Path to a CSS file or directory in which to write output. The path will
         be created if it does not exist.
@@ -90,7 +90,10 @@ def compile_sass(
         sassargs.update({"filename": inpath})
         if os.path.isdir(outpath):
             outfile = os.path.join(
-                outpath, os.path.basename(inpath.replace(".scss", ".css"))
+                outpath,
+                os.path.basename(
+                    inpath.replace(".scss", ".css").replace(".sass", ".css")
+                ),
             )
         else:
             outfile = outpath
