@@ -119,6 +119,19 @@ class TestDjangoSass(unittest.TestCase):
             contains=SCSS_CONTAINS,
         )
 
+    def test_cli_infile_outdir(self):
+        # Input is a file; output is non-existant path (without .css extension).
+        inpath = os.path.join("app2", "static", "app2", "scss", "test.scss")
+        outpath = os.path.join(self.outdir, "does-not-exist")
+        # Expected output path on filesystem.
+        real_outpath = os.path.join(outpath, "test.css")
+        self.assert_output(
+            inpath=inpath,
+            outpath=outpath,
+            real_outpath=real_outpath,
+            contains=SCSS_CONTAINS,
+        )
+
     def test_sass_compiles(self):
         # Input and output paths relative to django static dirs.
         inpath = os.path.join("app3", "static", "app3", "sass")
