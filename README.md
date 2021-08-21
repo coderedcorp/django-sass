@@ -261,7 +261,8 @@ Changelog
 ---------
 
 #### 1.1.0
-* New: Will now compile Sass files as well as SCSS files.
+* New: Now compiles `.sass` files as well as `.scss` files.
+* Fix bug when input path is a file and output path does not exist.
 
 #### 1.0.1
 * Maintanence release, no functional changes.

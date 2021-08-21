@@ -87,8 +87,17 @@ def compile_sass(
     # Handle input files.
     outfile = None
     if os.path.isfile(inpath):
+
         sassargs.update({"filename": inpath})
-        if os.path.isdir(outpath):
+
+        # If outpath does not exist, guess if it should be a dir and create it.
+        if not os.path.exists(outpath):
+            if not outpath.endswith(".css"):
+                os.makedirs(outpath)
+
+        # If outpath is a directory, create a child file.
+        # Otherwise use provided file path.
+        if os.path.exists(outpath) and os.path.isdir(outpath):
             outfile = os.path.join(
                 outpath,
                 os.path.basename(
@@ -97,6 +106,8 @@ def compile_sass(
             )
         else:
             outfile = outpath
+
+        # Create source map if specified.
         if source_map:
             sassargs.update({"source_map_filename": outfile + ".map"})
 
