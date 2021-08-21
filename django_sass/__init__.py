@@ -92,7 +92,7 @@ def compile_sass(
 
         # If outpath does not exist, guess if it should be a dir and create it.
         if not os.path.exists(outpath):
-            if not (outpath.endswith(".scss") or outpath.endswith(".sass")):
+            if not outpath.endswith(".css"):
                 os.makedirs(outpath)
 
         # If outpath is a directory, create a child file.
